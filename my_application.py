@@ -1,3 +1,4 @@
+#importing required libraries
 import tkinter
 from tkinter import *
 from tkinter import Tk
@@ -80,7 +81,8 @@ class Application(Tk):
             self.file_function()
         if(self.keyword_location!=""):
             self.keyword_function()
-
+    
+    #Function to find most and least frequent words
     def file_function(self):
         data = open(self.file_location,"r")
         raw_data = data.read()
@@ -115,7 +117,8 @@ class Application(Tk):
 
         self.least_frequent_word=min(map_words,key=map_words.get)
         self.least_frequent.config(text="Least Frequent Word : " + self.least_frequent_word)
-
+    
+    #Function for extracting sentences with given keywords
     def keyword_function(self):
         data = open(self.file_location,"r")
         raw_data=data.read()
@@ -132,7 +135,8 @@ class Application(Tk):
                     check=1
             self.count_in_keyword+=check
         self.keyword_file.config(text="Number of Sentences with keywords: " + str(self.count_in_keyword))
-
+    
+    #Function for plotting histogram
     def plot_function(self):
         data = open(self.file_location,"r")
         raw_data=data.read()
