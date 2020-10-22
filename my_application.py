@@ -82,7 +82,7 @@ class Application(Tk):
 
     def set_keyword_location(self):
         self.keyword_location = filedialog.askopenfilename()
-        self.keyword_label.config(text = "File: " + self.keyword_location)
+        self.keyword_label.config(text = "Keyword File: " + self.keyword_location)
         self.keyword_function()
 
     def refresh_function(self):
