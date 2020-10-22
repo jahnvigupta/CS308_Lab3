@@ -56,6 +56,10 @@ class Application(Tk):
         self.keyword_file = Label(self, text="Number of Sentences with keywords..." + str(self.count_in_keyword))
         self.keyword_file.pack()
 
+        #Histogram button 
+        self.histogram = tkinter.Button(self, text="Plot Histogram",fg="red",command=self.plot_function)
+        self.histogram.pack()
+
         #Quit button 
         self.quit = tkinter.Button(self, text="QUIT", fg="red",command=self.destroy)
         self.quit.pack(side="bottom")
@@ -128,6 +132,27 @@ class Application(Tk):
                     check=1
             self.count_in_keyword+=check
         self.keyword_file.config(text="Number of Sentences with keywords: " + str(self.count_in_keyword))
+
+    def plot_function(self):
+        data = open(self.file_location,"r")
+        raw_data=data.read()
+        words=raw_data.split()
+        word_new_list=[]
+        for i in range(len(words)):
+            check=0
+            for j in range(len(self.except_array)):
+                if words[i]==self.except_array[j]:
+                    check=1
+            if(check==0):
+                word_new_list.append(words[i])
+        word_uniq,value = np.unique(word_new_list,return_counts=True)
+        ticks = range(len(value))
+        plt.bar(ticks,value,align='center')
+        plt.xticks(ticks,word_uniq)
+        plt.title('Histogram for Count of each Word...',fontweight ="bold") 
+        plt.xlabel('Words',fontsize=15)
+        plt.ylabel('Frequency',fontsize=15)
+        plt.show()
 
 app = Application()
 app.title("Statistics For the File")
