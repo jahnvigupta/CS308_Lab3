@@ -1,4 +1,3 @@
-#importing required libraries
 import tkinter
 from tkinter import *
 from tkinter import Tk
@@ -22,7 +21,7 @@ class Application(Tk):
 
         self.except_array=[".",",","?","!",":",";"]
 
-        self.geometry('400x300')
+        self.geometry('550x320')
         self.grid()
 
         self.file_label=Label(self, text = "File Not Chosen ." + self.file_location)
@@ -57,6 +56,16 @@ class Application(Tk):
         self.keyword_file = Label(self, text="Number of Sentences with keywords..." + str(self.count_in_keyword))
         self.keyword_file.pack()
 
+        #Code for creating button for extra infomation
+        self.extra = tkinter.Button(self,text = "Exta Information", command = self.extra_function)
+        self.extra.pack()
+        
+        #Label for exta Information
+        self.most_frequents = Label(self, text="")
+        self.most_frequents.pack()
+        self.least_frequents= Label(self, text="")
+        self.least_frequents.pack()
+
         #Histogram button 
         self.histogram = tkinter.Button(self, text="Plot Histogram",fg="red",command=self.plot_function)
         self.histogram.pack()
@@ -81,8 +90,9 @@ class Application(Tk):
             self.file_function()
         if(self.keyword_location!=""):
             self.keyword_function()
-    
-    #Function to find most and least frequent words
+        if(self.file_location!=""):
+            self.extra_function()
+
     def file_function(self):
         data = open(self.file_location,"r")
         raw_data = data.read()
@@ -108,7 +118,7 @@ class Application(Tk):
         word_list=word_new_list
         for i in range(len(word_list)):
             if(map_words.get(word_list[i])==None):
-                map_words[word_list[i]]=0
+                map_words[word_list[i]]=1
             else:
                 map_words[word_list[i]]+=1
         self.most_frequent_word=max(map_words,key=map_words.get)
@@ -117,8 +127,7 @@ class Application(Tk):
 
         self.least_frequent_word=min(map_words,key=map_words.get)
         self.least_frequent.config(text="Least Frequent Word : " + self.least_frequent_word)
-    
-    #Function for extracting sentences with given keywords
+
     def keyword_function(self):
         data = open(self.file_location,"r")
         raw_data=data.read()
@@ -135,8 +144,7 @@ class Application(Tk):
                     check=1
             self.count_in_keyword+=check
         self.keyword_file.config(text="Number of Sentences with keywords: " + str(self.count_in_keyword))
-    
-    #Function for plotting histogram
+
     def plot_function(self):
         data = open(self.file_location,"r")
         raw_data=data.read()
@@ -157,6 +165,52 @@ class Application(Tk):
         plt.xlabel('Words',fontsize=15)
         plt.ylabel('Frequency',fontsize=15)
         plt.show()
+
+    def extra_function(self):
+        if(self.file_location==""):
+            return
+        data = open(self.file_location,"r")
+        raw_data = data.read()
+        words=raw_data.split()
+        word_new_list=[]
+        for i in range(len(words)):
+            check=0
+            for j in range(len(self.except_array)):
+                if words[i]==self.except_array[j]:
+                    check=1
+            if(check==0):
+                word_new_list.append(words[i])
+        map_words=dict()
+        word_list=word_new_list
+        for i in range(len(word_list)):
+            if(map_words.get(word_list[i])==None):
+                map_words[word_list[i]]=1
+            else:
+                map_words[word_list[i]]+=1
+        temp_map_words=map_words
+        map_words=sorted(map_words.items(), key =lambda kv:(kv[1], kv[0]))
+        least_frequent_words=""
+        x=0 
+        for i in range(len(map_words)):
+            if x<3:
+                least_frequent_words+=(map_words[x][0]+",") 
+                x=x+1
+            else:
+                break  
+        least_frequent_words+="etc.."
+        
+        map_words=sorted(temp_map_words.items(), key =lambda kv:(kv[1], kv[0]),reverse=True)
+        most_frequent_words=""
+        x=0
+        for i in range(len(map_words)):
+            if x<3:
+                most_frequent_words+=(map_words[x][0]+",") 
+                x=x+1
+            else:
+                break  
+        most_frequent_words+="etc.."
+        self.most_frequents.config(text="Other More Frequently Occuring Words : " + most_frequent_words)
+        self.least_frequents.config(text="Other Least Frequently Occuring Words :" + least_frequent_words)
 
 app = Application()
 app.title("Statistics For the File")
