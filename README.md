@@ -27,7 +27,7 @@ File-Inspector is a tool developed in LAP 2020 by one of the student teams.
         python3 my_application.py
 
 ## Useful links
-* [Requirements Document](documentation/requirements)
-* [Design Document](documentation/design)
+* [Requirements Document](https://github.com/jahnvigupta/CS308_Lab3/blob/master/documentation/requirements.md)
+* [Design Document](https://github.com/jahnvigupta/CS308_Lab3/blob/master/documentation/design.md)
 
 
