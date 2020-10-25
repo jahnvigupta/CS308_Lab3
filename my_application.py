@@ -24,11 +24,12 @@ class Application(Tk):
         self.most_frequent_word=""
         self.least_frequent_word=""
         self.count_in_keyword=0
+        self.sentences_with_keyword=""
         
         # The symbols that need to be ignored in the input text file are in except_array
         self.except_array=[".",",","?","!",":",";"]
 
-        self.geometry('550x320')
+        self.geometry('550x520')
         self.grid()
         
         # File labels 
@@ -77,6 +78,10 @@ class Application(Tk):
         #Creting Histogram button which displays histogram in the GUI 
         self.histogram = tkinter.Button(self, text="Plot Histogram",fg="red",command=self.plot_function)
         self.histogram.pack()
+
+        #Creating label of string with keyword
+        self.keyword_string = Label(self, text="Printing sentences :\n")
+        self.keyword_string.pack()
 
         #Creating the quit button in the GUI 
         self.quit = tkinter.Button(self, text="QUIT", fg="red",command=self.destroy)
@@ -164,6 +169,8 @@ class Application(Tk):
         raw_data.replace("?",".")
         raw_data.replace("!",".")
         sentences=raw_data.split(".")
+
+        self.sentences_with_keyword=""
         
         # Count the number of sentences with keywords
         self.count_in_keyword=0
@@ -172,9 +179,13 @@ class Application(Tk):
             for j in range(len(keyword)):
                 if(sentences[i].count(keyword[j])>0):
                     check=1
+            self.sentences_with_keyword+=("\n"+sentences[i])
             self.count_in_keyword+=check
             
-        # Display the number of sentences with keywords
+        # Display the number of sentences with keywords and also print them..
+
+        self.keyword_string.config(text="Sentences with keywords: \n" + str(self.sentences_with_keyword))
+
         self.keyword_file.config(text="Number of Sentences with keywords: " + str(self.count_in_keyword))
 
     # Defining the function to plot the Bar graph
